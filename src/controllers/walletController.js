@@ -16,7 +16,7 @@ const options = {
   }
 
 
-exports.getWallet = (handle,access_token) => {
+exports.getWallet = (access_token, handle) => {
     let request = {
         ...options,
         method: 'GET',
@@ -97,4 +97,8 @@ exports.getBalance = (handle,access_token) => {
     return rp(request)
         .then(res => res.amount)
         .catch(err => console.log("Error creating signer", err));
+}
+
+exports.getWalletUidFromHandle = (access_token, handle) => {
+  return exports.getWallet(access_token, handle,).then(wallet => wallet.labels.defaultOwner);
 }

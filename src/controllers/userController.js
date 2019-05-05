@@ -3,7 +3,7 @@ const { errorHandler } = require('../config/error');
 const { getWallet, getBalance, createWallet, assignSignerToWallet } = require('../controllers/walletController');
 const { getNewAccessToken } = require('../utils/accessToken');
 const { createSigner } = require("../controllers/signerController");
-
+const { getWalletUidFromHandle } = require('./walletController')
 /**
  * Load user and append to req.
  * @public
@@ -38,7 +38,7 @@ exports.getWallets = (req,res) => {
       let wallets = [];
       for(let handle of snapshot.val().wallets){
         console.log(handle)
-        let wallet = await getWallet(handle,accessToken)
+        let wallet = await getWallet(accessToken, handle)
         wallet.balance = await getBalance(handle,accessToken)
         wallets.push(wallet)
       }
@@ -92,4 +92,37 @@ exports.createUser = (req, res) => {
       })
       .catch(error => console.log('Error creating new user:', error));
   });
+}
+
+exports.getUidFromHandle = function getUidFromHandle(access_token, handle) {
+  let walletHandle = "";
+  if(!handle.startsWith('$')) {
+    // Treat signer wallet handle
+    walletHandle = getSignerWalletHandle(access_token, handle);
+  } else {
+    // Treat as a wallet
+    walletHandle = handle;
+  }
+  return getWalletUidFromHandle(access_token, walletHandle);
+}
+
+
+const getUserFromUid = (uid) => {
+  return auth.getUser(uid)
+    .then(userRecord => userRecord.toJSON())
+    .catch(err => {
+      console.log('Error fetching user data:', err);
+    });
+}
+
+
+exports.getNameFromUid = function getNameFromUid(uid) {
+  return getUserFromUid(uid).then(user => user.displayName);
+}
+
+
+exports.getNameFromHandle = (access_token, handle) => {
+  return exports.getUidFromHandle(access_token, handle).then(uid => {
+    return exports.getNameFromUid(uid);
+  })
 }
