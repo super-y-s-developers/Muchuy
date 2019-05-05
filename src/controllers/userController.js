@@ -3,7 +3,8 @@ const { errorHandler } = require('../config/error');
 const { getWallet, getBalance, createWallet, assignSignerToWallet } = require('../controllers/walletController');
 const { getNewAccessToken } = require('../utils/accessToken');
 const { createSigner } = require("../controllers/signerController");
-const { getWalletUidFromHandle } = require('./walletController')
+const { getWalletUidFromHandle } = require('./walletController');
+const { getSignerWalletHandle } = require('./signerController');
 /**
  * Load user and append to req.
  * @public

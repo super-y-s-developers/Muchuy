@@ -82,29 +82,50 @@ exports.askTransaction = (req, res) => {
       }).then(msg => res.send(msg))
   }
 
+  exports.getAction = (access_token, action_id) => {
+    const options = {
+      uri: `${MINKA_URL}/v1/action/${action_id}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': MINKA_API_KEY,
+        'Authorization': `Bearer ${access_token}`
+      },
+      json: true
+    }
+  
+    return rp(options)
+      .then(res => res)
+      .catch(err => console.log("Error getting action", err));
+  }
+
   exports.answerTransaction = async(req, res) => {
     let {action_id, answer} = req.body;
     let access_token = await getNewAccessToken()
     let { source, target } = await exports.getAction(access_token, action_id)
-    console.log(access_token, source)
+    let uid = await getUidFromHandle(access_token, source)
     
-    let targetData = getMainDataFromHandle(access_token, target)
+    let targetData = await getMainDataFromHandle(access_token, target)
     if(answer == true) {
       
       // Sign transaction
       let res = await signAction(access_token, action_id)
       const { error, labels } = res;
       console.log(access_token, source)
-      let uid = getUidFromHandle(access_token, source)
       
       if(error.code != 0) {
         // Tell receiver that transaction had an error
-        res.json( sendNotification(labels.created, action_id, uid, "ERROR", { targetData }));
+        sendNotification(labels.created, action_id, uid, "ERROR", { targetData })
+            .then(n => res.json(n))
+            .catch(consooe.error);
+        
       }
     }
 
     // Tell receiver that transaction has a response
-    res.json( sendNotification(new Date(), action_id, uid, "RESPONSE", { targetData, answer }));
+    sendNotification(new Date(), action_id, uid, "RESPONSE", { targetData, answer })
+        .then(n => res.json(n))
+        .catch(consooe.error);
   }
 
 

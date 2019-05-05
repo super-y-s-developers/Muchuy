@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const userRoutes = require('./userRouter');
-const transactionRoutes = require('./transactionRoutes');
+const transactionRoutes = require('./transactionRouter');
 
 /**
  * GET v1/status

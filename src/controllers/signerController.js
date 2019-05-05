@@ -50,3 +50,7 @@ exports.getBalance = (handle,access_token) => {
         .then(res => res.error.code ? res.amout : rejected())
         .catch(err => console.log("Error creating signer", err));
 }
+
+exports.getSignerWalletHandle = (access_token, signerHandle) => {
+    return getSigner(access_token, signerHandle).then(signer => signer.labels.walletHandle);
+  }
