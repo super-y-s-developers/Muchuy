@@ -1,0 +1,19 @@
+{
+    "name": "app",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node cluster.js"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+      "express": "latest",
+      "body-parser": "latest",
+      "sqlite3": "latest",
+      "request": "latest",
+      "request-promise-native": "latest"
+    }
+  }
+  
