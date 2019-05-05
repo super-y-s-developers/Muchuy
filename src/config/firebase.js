@@ -6,3 +6,5 @@ admin.initializeApp({
 });
 
 exports.auth = admin.auth();
+exports.db = admin.database();
+exports.userRef = exports.db.ref("user");

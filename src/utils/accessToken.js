@@ -1,8 +1,12 @@
+const rp = require('request-promise-native');
+const { MINKA_URL } = process.env;
+
+
 exports.getNewAccessToken = () => {
     const data = "client_id=d42687BAc0cC71F79d9D1bA98DDA9C7D&secret=a27Acb0a4BCE227D25f9Fde49eBb08fEfaecBDda457e9e2D&grant_type=client_credentials"
 
     const options = {
-        uri: 'https://api-tst.minka.io/oauth/token',
+        uri: `${MINKA_URL}/oauth/token`,
         method: 'POST',
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -22,7 +26,7 @@ exports.verifyAccessToken = (access_token) => {
     const data = "client_id=d42687BAc0cC71F79d9D1bA98DDA9C7D&secret=a27Acb0a4BCE227D25f9Fde49eBb08fEfaecBDda457e9e2D&grant_type=client_credentials"
 
     const options = {
-        uri: `https://api-tst.minka.io/oauth/tokeninfo?access_token=${access_token}`,
+        uri: `${MINKA_URL}/oauth/tokeninfo?access_token=${access_token}`,
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': data.length,
