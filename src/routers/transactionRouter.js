@@ -11,7 +11,7 @@ router
   .post(askTransaction)
 
   router
-  .route('/asnwer')
+  .route('/answer')
   /**
    * @api {post} v1/transaction/asnwer Post transaction - give an answer to an transaction asked
    */ 
