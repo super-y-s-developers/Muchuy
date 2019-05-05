@@ -27,7 +27,7 @@ exports.getBalance = (req, res) => {
     let handle = userRef.child(req.locals.user.uid).on("value", snapshot => {
       getBalance(snapshot.val().default,accessToken).then(balance => {
         res.json(balance)
-      })
+      }).catch(console.error)
     })
   });
 };
@@ -50,7 +50,7 @@ exports.getWallets = (req,res) => {
 
 
 exports.createUser = (req, res) => {
-  const { email, password, cc, name, phone } = req.body;
+  const { email, password, cc, name/*, phone*/ } = req.body;
   const uid = "";
   return getNewAccessToken().then(access_token => {
     
@@ -74,7 +74,7 @@ exports.createUser = (req, res) => {
             // Assign signer to wallet as default in Minka
             assignSignerToWallet(access_token, signerHandle, walletHandle, isDefault=true)
               .then(err => {
-                if(err.code == 0) {
+                if(err && err.code == 0) {
 
                   // Create user in firebase database
                   userRef.child(uid).set({
@@ -94,7 +94,7 @@ exports.createUser = (req, res) => {
   });
 }
 
-exports.getUidFromHandle = function getUidFromHandle(access_token, handle) {
+exports.getUidFromHandle = (access_token, handle) => {
   let walletHandle = "";
   if(!handle.startsWith('$')) {
     // Treat signer wallet handle
@@ -124,5 +124,20 @@ exports.getNameFromUid = function getNameFromUid(uid) {
 exports.getNameFromHandle = (access_token, handle) => {
   return exports.getUidFromHandle(access_token, handle).then(uid => {
     return exports.getNameFromUid(uid);
+  })
+}
+
+exports.getMainDataFromUid = uid => {
+  return getUserFromUid(uid).then(user => {
+    return {
+      name: user.displayName,
+      uid
+    }
+  });
+}
+
+exports.getMainDataFromHandle = (access_token, handle) => {
+  return exports.getUidFromHandle(access_token, handle).then(uid => {
+    return exports.getMainDataFromUid(uid);
   })
 }

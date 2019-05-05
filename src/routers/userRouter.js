@@ -1,7 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const { authorize } = require('../config/auth.js');
-const { askTransaction } = require('../controllers/actionController')
+const { askTransaction, answerTransaction } = require('../controllers/actionController')
 
 const router = express.Router();
 /**
@@ -36,14 +36,6 @@ router
    * @api {get} v1/users/:uuid/wallets/ Get User's wallets
    */ 
   .get(authorize, userController.getWallets);
-
-router
-  .route('/askTransaction')
-  /**
-   * @api {post} v1/users/askTransaction Post User - create new user
-   */ 
-  .post(askTransaction)
-
-   
+  
 
   module.exports = router;

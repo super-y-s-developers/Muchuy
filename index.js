@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.send('Muchuy api v0.1');
+    res.send('Muchuy api v0.7');
 });
 
 app.use('/v1', routes);
