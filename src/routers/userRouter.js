@@ -28,6 +28,13 @@ router
    * @api {get} v1/users/:uuid/balance/:handle Get User wallet balance
    */ 
   .get(authorize, userController.getBalance);
-  
+ 
+router
+  .route('/:uuid/wallets/')
+  /**
+   * @api {get} v1/users/:uuid/wallets/ Get User's wallets
+   */ 
+  .get(authorize, userController.getWallets);
+   
 
   module.exports = router;

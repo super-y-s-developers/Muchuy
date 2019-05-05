@@ -10,6 +10,7 @@
     "license": "MIT",
     "dependencies": {
         "body-parser": "latest",
+        "cors": "^2.8.5",
         "dotenv": "^8.0.0",
         "express": "latest",
         "firebase-admin": "^7.3.0",

@@ -1,6 +1,6 @@
 const { auth, userRef } = require("../config/firebase");
 const { errorHandler } = require('../config/error');
-const { getBalance, createWallet, assignSignerToWallet } = require('../controllers/walletController');
+const { getWallet, getBalance, createWallet, assignSignerToWallet } = require('../controllers/walletController');
 const { getNewAccessToken } = require('../utils/accessToken');
 const { createSigner } = require("../controllers/signerController");
 
@@ -31,6 +31,22 @@ exports.getBalance = (req, res) => {
     })
   });
 };
+
+exports.getWallets = (req,res) => {
+  getNewAccessToken().then(accessToken => {
+    let handle = userRef.child(req.locals.user.uid).on("value", async snapshot => {
+      let wallets = [];
+      for(let handle of snapshot.val().wallets){
+        console.log(handle)
+        let wallet = await getWallet(handle,accessToken)
+        wallet.balance = await getBalance(handle,accessToken)
+        wallets.push(wallet)
+      }
+      console.log(wallets)
+      res.json(wallets)
+    })
+  });
+}
 
 
 exports.createUser = (req, res) => {

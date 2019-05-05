@@ -15,6 +15,24 @@ const options = {
     json: true
   }
 
+
+exports.getWallet = (handle,access_token) => {
+    let request = {
+        ...options,
+        method: 'GET',
+        uri: `${uri}/${handle}`,
+        headers: {
+            ...headers,
+            'Authorization': `Bearer ${access_token}`
+        },
+    }
+
+    return rp(request)
+        .then(res => res)
+        .catch(err => console.log("Error creating signer", err));
+}
+
+
 exports.createWallet = function createWallet(access_token, type, handle) {
   const data = {
     "handle": handle, 
@@ -33,7 +51,6 @@ exports.createWallet = function createWallet(access_token, type, handle) {
         },
         body: data,
   }
-
 
   return rp(request)
     .then(res => res.handle)
